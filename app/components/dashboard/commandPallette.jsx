@@ -53,7 +53,7 @@ const CommandPallette = ({ isOpen, onClose }) => {
                 ref={inputRef}
                 type="text"
                 placeholder="Escribe algo para buscar..."
-                className="py-2 ml-1 pl-3 w-full focus:outline-none text-sm text-gray-500"
+                className="py-2 pl-3 w-full focus:outline-none focus:ring-primary-600 text-sm   rounded-r-none rounded-l-md  text-gray-500 border-none"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
@@ -68,25 +68,25 @@ const CommandPallette = ({ isOpen, onClose }) => {
           <div className="mt-2">
             <div className="flex mb-2 gap-1">
               <button
-                className={`px-2 py-1 rounded-[5px] text-[13px] ${selectedCategory === 'users' ? 'bg-indigo-800 text-white' : 'bg-gray-200'}`}
+                className={`px-2 py-1 rounded-[5px] text-[13px] ${selectedCategory === 'users' ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}
                 onClick={() => setSelectedCategory('users')}
               >
                 usuarios
               </button>
               <button
-                className={`px-2 py-1 rounded-[5px] text-[13px] ${selectedCategory === 'touristSpots' ? 'bg-indigo-800 text-white' : 'bg-gray-200'}`}
+                className={`px-2 py-1 rounded-[5px] text-[13px] ${selectedCategory === 'touristSpots' ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}
                 onClick={() => setSelectedCategory('touristSpots')}
               >
                 Lugares turísticos
               </button>
               <button
-                className={`px-3 py-1 rounded-[5px] text-[13px] ${selectedCategory === 'locations' ? 'bg-indigo-800 text-white' : 'bg-gray-200'}`}
+                className={`px-3 py-1 rounded-[5px] text-[13px] ${selectedCategory === 'locations' ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}
                 onClick={() => setSelectedCategory('locations')}
               >
                 Ubicaciones
               </button>
               <button
-                className={`px-3 py-1 rounded-[5px] text-[13px] ${selectedCategory === 'activities' ? 'bg-indigo-800 text-white' : 'bg-gray-200'}`}
+                className={`px-3 py-1 rounded-[5px] text-[13px] ${selectedCategory === 'activities' ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}
                 onClick={() => setSelectedCategory('activities')}
               >
                 Actividades

@@ -1,19 +1,21 @@
 'use client';
-import { ChevronLeftIcon, EllipsisVerticalIcon } from '@heroicons/react/20/solid';
-import Link from 'next/link';
+import { ChevronLeftIcon } from '@heroicons/react/20/solid';
 import { useState, createContext, useContext } from 'react';
-import ProfileMenu from './profileMenu';
+import { useSession } from 'next-auth/react';
+import ProfileMenu from '../profileMenu';
 
-const SidebarContext = createContext();
+export const SidebarContext = createContext();
 
 export default function AsideDashboard({ children }) {
+  const { data: session } = useSession();
+  console.log(session);
   const [expanded, setExpanded] = useState(true);
   return (
     <aside className='min-h-screen hidden lg:block'>
       <nav className='h-full flex flex-col bg-white border-r shadow-sm'>
         <div className='p-4 pb-2 flex  justify-between items-center'>
           <img
-            src="https://img.logoipsum.com/243.svg"
+            src="https://img.logoipsum.com/238.svg"
             alt=""
             className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`}
           />
@@ -29,16 +31,16 @@ export default function AsideDashboard({ children }) {
 
         <div className='border-t flex p-3 '>
           <img
-            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
+            src={session?.user.user.img_profile ?? "https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"}
             alt=""
-            className='w-10 h-10 rounded-md'
+            className='w-10 h-10 rounded-md object-cover'
           />
           <div
             className={`flex  justify-between items-center  transition-all  ${expanded ? "w-52 ml-3 " : "w-0 hidden"}`}
           >
             <div className='leading-4'>
-              <h4 className="font-semibold">John Doe</h4>
-              <span className='text-xs text-gray-600'>johndoe@gmail.com</span>
+              <h4 className="font-semibold">{session?.user.user.first_name}</h4>
+              <span className='text-xs text-gray-600'>{session?.user.email}</span>
             </div>
             <ProfileMenu />
           </div>
@@ -48,23 +50,3 @@ export default function AsideDashboard({ children }) {
   )
 }
 
-export function SidebarItem({ icon, text, active, alert, href }) {
-  const { expanded } = useContext(SidebarContext);
-  return (
-    <Link href={href}>
-      <li className={`nav-link group ${active ? 'nav-link-active' : 'nav-link-inactive'}`} >
-        {icon}
-        <span className={` overflow-hidden transition-all  ${expanded ? "w-52 ml-3" : "w-0"}`}>
-          {text}
-        </span>
-        {alert && (
-          <div className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${expanded ? "" : "top-2"}`} />
-        )}
-        {!expanded && (
-          <div className="nav-link-active-hover">
-            {text}
-          </div>)}
-      </li>
-    </Link>
-  );
-}

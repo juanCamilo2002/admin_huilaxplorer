@@ -1,8 +1,12 @@
+"use client";
+import { useSession } from 'next-auth/react'
 import React from 'react'
 
 const DashboardPage = () => {
+  const { data: session } = useSession();
+  console.log(session)
   return (
-    <div className='border-2 rounded-md border-dotted min-h-screen border-gray-300'>DashboardPage</div>
+    <div className=''>DashboardPage</div>
   )
 }
 

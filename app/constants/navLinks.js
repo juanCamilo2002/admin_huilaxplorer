@@ -6,30 +6,30 @@ const navLinks = [
     icon: HomeIcon,
     text: 'Inicio',
     navUrl: '/dashboard',
-    alert: true
+    alert: false
   },
   {
     icon: GlobeAltIcon,
     text: 'Lugares Turisticos',
-    navUrl: '/tourist-spots',
+    navUrl: '/dashboard/tourist-spots',
     alert: false
   },
   {
     icon: CalendarIcon,
     text: 'Actividades',
-    navUrl: '/activities',
+    navUrl: '/dashboard/activities',
     alert: false
   },
   {
     icon: MapPinIcon,
     text: 'Ubicaciones',
-    navUrl: '/locations',
+    navUrl: '/dashboard/locations',
     alert: false
   },
   {
     icon: UserIcon,
     text: 'Usuarios',
-    navUrl: '/users',
+    navUrl: '/dashboard/users',
     alert: false
   },
 
