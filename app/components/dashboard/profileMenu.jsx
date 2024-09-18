@@ -1,6 +1,8 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { CogIcon, EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
+import { signOut } from 'next-auth/react';
+
 const ProfileMenu = () => {
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -29,6 +31,7 @@ const ProfileMenu = () => {
           <form action="#" method="POST">
             <MenuItem>
               <button
+                onClick={() => signOut()}
                 type="submit"
                 className="flex gap-2 items-center w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
               >

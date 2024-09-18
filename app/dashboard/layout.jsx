@@ -1,8 +1,9 @@
 "use client";
-import AsideDashboard, { SidebarItem } from '../components/dashboard/asideDashboard'
+import AsideDashboard from '../components/dashboard/sidebar/asideDashboard'
 import HeaderDashboard from '../components/dashboard/headerDashboard'
 import navLinks from '../constants/navLinks';
 import { usePathname } from 'next/navigation';
+import SidebarItem from '../components/dashboard/sidebar/sideBarItem';
 const Layout = ({ children }) => {
     const pathname = usePathname();
     return (
@@ -19,7 +20,7 @@ const Layout = ({ children }) => {
                     />
                 ))}
             </AsideDashboard>
-            <section className='w-full overflow-y-scroll'>
+            <section className='w-full overflow-y-auto'>
                 <HeaderDashboard />
                 <div className='p-5'>
                     {children}
