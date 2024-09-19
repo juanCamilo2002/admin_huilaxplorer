@@ -25,8 +25,6 @@ const FormLogin = () => {
       email: data.email,
       password: data.password
     });
-
-    console.log(result);
     if (result.error) {
      toast.error("Credenciales inválidas");
      toast.warning("usuario no autorizado");
