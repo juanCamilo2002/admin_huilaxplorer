@@ -11,7 +11,7 @@ const handler = NextAuth({
             },
             authorize: async (credentials) => {
                 try {
-                    const res = await fetch(`${process.env.MEXT_PUBLIC_API_URL}/auth/jwt/create/`, {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/jwt/create/`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
@@ -24,7 +24,7 @@ const handler = NextAuth({
 
                     if (res.ok && user.access) {
                         // get user info
-                        const userInfoResponse = await fetch(`${process.env.MEXT_PUBLIC_API_URL}/auth/users/me/`, {
+                        const userInfoResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/users/me/`, {
                             headers: {
                                 Authorization: `Bearer ${user.access}`,
                             },
@@ -76,6 +76,7 @@ const handler = NextAuth({
         },
         async session({ session, token }) {
             session.accessToken = token.accessToken;
+            session.refreshToken = token.refreshToken;
             session.error = token.error;
             session.isStaff = token.isStaff;
             session.isSuperuser = token.isSuperuser;
@@ -92,7 +93,7 @@ const handler = NextAuth({
 
 async function refreshAccessToken(token) {
     try {
-        const res = await fetch(`${process.env.MEXT_PUBLIC_API_URL}/auth/jwt/refresh/`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/jwt/refresh/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ refresh: token.refreshToken }),
