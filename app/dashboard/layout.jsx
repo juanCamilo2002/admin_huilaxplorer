@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
                     />
                 ))}
             </AsideDashboard>
-            <section className='w-full overflow-y-auto'>
+            <section className='w-full overflow-y-auto bg-gray-100'>
                 <HeaderDashboard />
                 <div className='p-5'>
                     {children}
