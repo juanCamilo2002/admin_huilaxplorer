@@ -29,7 +29,7 @@ export default function HeaderDashboard() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
   return (
-    <header className="bg-white border-b sticky top-0 ">
+    <header className="bg-white border-b sticky top-0 z-50">
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 lg:px-8 ">
         <div className="flex lg:flex-1 ">
           <a href="#" className="-m-1.5 p-1.5">
