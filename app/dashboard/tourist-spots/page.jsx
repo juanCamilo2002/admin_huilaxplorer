@@ -109,6 +109,11 @@ const TouristSpotsPage = () => {
         }
     ], []);
 
+
+    const handleCreate = () => {
+        return router.push('/dashboard/tourist-spots/create');
+    }
+
     return (
         <div className="container mx-auto p-4">
             <DataTable
@@ -120,7 +125,7 @@ const TouristSpotsPage = () => {
                 setPageIndex={setPageIndex}
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
-                addRoute={'/dashboard/tourist-spots/create'}
+                handleCreate={handleCreate}
                 onSearch={handleSearch}
             />
             <Modal
