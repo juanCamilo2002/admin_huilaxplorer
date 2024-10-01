@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
                         key={index}
                         icon={<navLink.icon className='w-5 h-5' />}
                         text={navLink.text}
-                        active={pathname === navLink.navUrl}
+                        active={pathname.split("/")[2] === navLink.navUrl.split("/")[2] ? true : false}
                         alert={navLink.alert}
                         href={navLink.navUrl}
                     />

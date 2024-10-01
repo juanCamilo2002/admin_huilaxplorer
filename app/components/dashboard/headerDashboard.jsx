@@ -12,7 +12,12 @@ import MobileNavlink from './mobileNavlink'
 export default function HeaderDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
-  const pathname = usePathname()
+  const pathname = usePathname();
+
+  const activeLink = [...navLinks] 
+  .sort((a, b) => b.navUrl.length - a.navUrl.length) 
+  .find((link) => pathname.startsWith(link.navUrl));
+
   // Maneja la apertura de la paleta con Ctrl+K o Cmd+K
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -33,7 +38,7 @@ export default function HeaderDashboard() {
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 lg:px-8 ">
         <div className="flex lg:flex-1 ">
           <a href="#" className="-m-1.5 p-1.5">
-            <span className="text-xl capitalize hidden sm:block">{pathname.split("/")[1]}</span>
+            <span className="text-xl capitalize hidden sm:block">{ activeLink?.text ?? 'INDEX'}</span>
             <img alt="" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" className="h-8 w-auto block sm:hidden" />
           </a>
         </div>

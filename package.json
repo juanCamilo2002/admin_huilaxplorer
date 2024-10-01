@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@tailwindcss/forms": "^0.5.9",
     "admin_huilaxplorer": "file:",
+    "axios": "^1.7.7",
     "chart.js": "^4.4.4",
     "next": "^14.2.8",
     "next-auth": "^4.24.7",
@@ -21,6 +22,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
+    "react-loading-skeleton": "^3.5.0",
     "react-table": "^7.8.0",
     "react-toastify": "^10.0.5",
     "yup": "^1.4.0"

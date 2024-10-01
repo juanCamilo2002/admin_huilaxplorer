@@ -1,145 +1,154 @@
 "use client";
+import React, { useState } from 'react';
+import { useTable, usePagination } from 'react-table';
+import { useRouter } from 'next/navigation';
+import Skeleton from 'react-loading-skeleton'; 
+import 'react-loading-skeleton/dist/skeleton.css'; 
 
-import React from 'react';
-import { useTable, usePagination, useGlobalFilter } from 'react-table';
-import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from '@heroicons/react/20/solid';
-import Link from 'next/link'; // Importa Link
+const DataTable = ({ data, columns, loading, totalCount, pageIndex, setPageIndex, rowsPerPage, setRowsPerPage, addRoute, onSearch }) => {
+    const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState(""); 
 
-const GlobalFilter = ({ globalFilter, setGlobalFilter, addButtonLink }) => {
-  return (
-    <div className="my-4 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-between items-center">
-      {/* Input de búsqueda */}
-      <input
-        value={globalFilter || ''}
-        onChange={(e) => setGlobalFilter(e.target.value || undefined)}
-        placeholder="Buscar..."
-        className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-600 w-full sm:w-1/2 lg:w-1/3"
-      />
-      
-      {/* Botón de agregar */}
-      <Link href={addButtonLink} className="w-full sm:w-auto bg-gradient-to-tr  from-primary-600 to-primary-400 text-white rounded-md flex items-center justify-center space-x-2 px-4 py-2">
-          <PlusIcon className="h-5 w-5" />
-          <span>Agregar</span>
-      </Link>
-    </div>
-  );
-};
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        page,
+        prepareRow,
+        canPreviousPage,
+        canNextPage,
+        pageCount,
+        previousPage,
+        nextPage,
+    } = useTable(
+        {
+            columns,
+            data,
+            manualPagination: true,
+            pageCount: Math.ceil(totalCount / rowsPerPage),
+            state: {
+                pageIndex,
+            },
+        },
+        usePagination
+    );
 
-const DataTable = ({ columns, data, addButtonLink }) => {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    prepareRow,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    nextPage,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize, globalFilter },
-    setGlobalFilter,
-  } = useTable(
-    {
-      columns,
-      data,
-      initialState: { pageIndex: 0 },
-    },
-    useGlobalFilter,
-    usePagination
-  );
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value); 
+        onSearch(e.target.value); 
+    };
 
-  return (
-    <div className="my-8">
-      <div className="bg-white shadow-lg p-2 rounded-lg my-6">
-        <GlobalFilter globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} addButtonLink={addButtonLink} />
-
-        <div className="overflow-x-auto">
-          <table {...getTableProps()} className="min-w-full table-auto">
-            <thead className="bg-gray-100">
-              {headerGroups.map((headerGroup) => (
-                <tr {...headerGroup.getHeaderGroupProps()} className="border-b">
-                  {headerGroup.headers.map((column) => (
-                    <th
-                      {...column.getHeaderProps()}
-                      className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+    return (
+        <div className='my-8'>
+            <div className='bg-white shadow-lg p-2 rounded-lg my-6'>
+                {/* Barra de búsqueda */}
+                <div className="flex justify-between items-center mb-4 mt-4">
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Buscar..."
+                            value={searchTerm}
+                            onChange={handleSearch}
+                            className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                        />
+                    </div>
+                    <button
+                        onClick={() => router.push(addRoute)}
+                        className="px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition"
                     >
-                      {column.render('Header')}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
-                prepareRow(row);
-                return (
-                  <tr
-                    {...row.getRowProps()}
-                    className="hover:bg-gray-50 transition-colors border-b"
-                  >
-                    {row.cells.map((cell) => (
-                      <td
-                        {...cell.getCellProps()}
-                        className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                        Agregar Nuevo
+                    </button>
+                </div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center p-4 bg-gray-100 border-t">
-          <div className="flex items-center space-x-2 mb-4 sm:mb-0">
-            <span className="text-sm text-gray-700">Mostrar</span>
-            <select
-              value={pageSize}
-              onChange={(e) => setPageSize(Number(e.target.value))}
-              className="bg-white border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-green-600"
-            >
-              {[5, 10, 20, 50].map((pageSizeOption) => (
-                <option key={pageSizeOption} value={pageSizeOption}>
-                  {pageSizeOption}
-                </option>
-              ))}
-            </select>
-            <span className="text-sm text-gray-700">registros por página</span>
-          </div>
+                {/* Tabla */}
+                <div className="overflow-x-auto">
+                    <table {...getTableProps()} className="min-w-full table-auto">
+                        <thead className='bg-gray-100'>
+                            {headerGroups.map(headerGroup => (
+                                <tr {...headerGroup.getHeaderGroupProps()} className="border-b">
+                                    {headerGroup.headers.map(column => (
+                                        <th {...column.getHeaderProps()} className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            {column.render('Header')}
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {loading ? (
+                                <tr>
+                                    <td colSpan={columns.length} className="border border-gray-300 p-2 text-center">
+                                        <Skeleton count={5} height={30} />
+                                    </td>
+                                </tr>
+                            ) : (
+                                page.map(row => {
+                                    prepareRow(row);
+                                    return (
+                                        <tr {...row.getRowProps()} className="hover:bg-gray-50 transition-colors border-b">
+                                            {row.cells.map(cell => (
+                                                <td {...cell.getCellProps()} className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                    {cell.render('Cell')}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    );
+                                })
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
-          <div className="flex space-x-2 items-center justify-end">
-            <button
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-              className={`${canPreviousPage
-                ? 'bg-green-600 hover:bg-green-700 text-white'
-                : 'bg-gray-200 cursor-not-allowed text-gray-500'
-                } px-4 py-2 rounded-md flex items-center`}
-            >
-              <ChevronLeftIcon className="h-5 w-5" />
-            </button>
-            <span className="text-sm text-gray-700">
-              Página <strong>{pageIndex + 1}</strong> de {pageOptions.length}
-            </span>
-            <button
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-              className={`${canNextPage
-                ? 'bg-green-600 hover:bg-green-700 text-white'
-                : 'bg-gray-200 cursor-not-allowed text-gray-500'
-                } px-4 py-2 rounded-md flex items-center`}
-            >
-              <ChevronRightIcon className="h-5 w-5" />
-            </button>
-          </div>
+                {/* Paginación */}
+                <div className="flex flex-col sm:flex-row justify-between items-center p-4 bg-gray-100 border-t">
+                    <div className="flex items-center">
+                        <button
+                            onClick={() => {
+                                previousPage();
+                                setPageIndex(prev => Math.max(prev - 1, 0));
+                            }}
+                            disabled={!canPreviousPage}
+                            className={`px-4 py-2 text-white ${canPreviousPage ? 'bg-primary-500 hover:bg-primary-600 transition' : 'bg-gray-300 cursor-not-allowed'} rounded`}
+                        >
+                            Anterior
+                        </button>
+                        <button
+                            onClick={() => {
+                                nextPage();
+                                setPageIndex(prev => Math.min(prev + 1, pageCount - 1));
+                            }}
+                            disabled={!canNextPage}
+                            className={`px-4 py-2 text-white ${canNextPage ? 'bg-primary-500 hover:bg-primary-600 transition' : 'bg-gray-300 cursor-not-allowed'} rounded ml-2`}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
+                    <span>
+                        Página{' '}
+                        <strong>
+                            {pageIndex + 1} de {pageCount}
+                        </strong>
+                    </span>
+                    <div className="mt-2 sm:mt-0">
+                        <label htmlFor="rows-per-page" className="mr-2">Filas por página:</label>
+                        <select
+                            id="rows-per-page"
+                            value={rowsPerPage}
+                            onChange={(e) => {
+                                setRowsPerPage(Number(e.target.value));
+                                setPageIndex(0);
+                            }}
+                            className="border border-gray-300 rounded focus:ring-primary-600 focus:border-primary-600"
+                        >
+                            <option value={12}>12</option>
+                            <option value={24}>24</option>
+                            <option value={36}>36</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default DataTable;

@@ -8,7 +8,6 @@ export const SidebarContext = createContext();
 
 export default function AsideDashboard({ children }) {
   const { data: session } = useSession();
-  console.log(session);
   const [expanded, setExpanded] = useState(true);
   return (
     <aside className='min-h-screen hidden lg:block'>

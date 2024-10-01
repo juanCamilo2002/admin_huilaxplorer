@@ -1,50 +1,44 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import DataTable from "@/app/components/common/datatable/Datatable";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import useCustomAxios from "@/app/services/CustomAxios";
 
 const UsersPage = () => {
-  const { data: session, status } = useSession();
-  const [users, setUsers] = useState([]);
+  const { request } = useCustomAxios();
+  const [data, setData] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(12);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const fetchData = async (pageIndex, searchTerm) => {
+    try {
+      const res = await request(
+        'get',
+        `/users/accounts/?limit=${rowsPerPage}&offset=${pageIndex * rowsPerPage}&search=${searchTerm}`
+      );
+      setData(res.results);
+      setTotalCount(res.count);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    if (status === "loading") return;
-    if (!session) {
-      setError("No estás autenticado.");
-      setLoading(false);
-      return;
-    }
+    fetchData(pageIndex, searchTerm);
+  }, [pageIndex, rowsPerPage, searchTerm])
 
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/accounts/`, {
-          headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-          },
-          cache: "no-store",
-        });
 
-        if (!res.ok) {
-          throw new Error("Error al obtener los usuarios.");
-        }
-
-        const data = await res.json();
-        setUsers(data.results);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, [session, status]);
-
-  console.log(users)
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    setPageIndex(0);
+  }
 
   const columns = [
     { Header: "Nombre", accessor: "first_name" },
@@ -81,21 +75,21 @@ const UsersPage = () => {
     },
   ];
 
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
 
   return (
     <div className="container mx-auto p-4">
-      {users.length > 0 ? (
-        <DataTable columns={columns} data={users} addButtonLink={"/create"}/>
-      ) : (
-        <p>No se encontraron usuarios.</p>
-      )}
+      <DataTable
+        data={data}
+        columns={columns}
+        loading={loading}
+        totalCount={totalCount}
+        pageIndex={pageIndex}
+        setPageIndex={setPageIndex}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
+        addRoute={'/dashboard/tourist-spots/create'}
+        onSearch={handleSearch}
+      />
     </div>
   );
 };
