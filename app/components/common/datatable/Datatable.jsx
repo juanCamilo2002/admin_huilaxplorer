@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Skeleton from 'react-loading-skeleton'; 
 import 'react-loading-skeleton/dist/skeleton.css'; 
 
-const DataTable = ({ data, columns, loading, totalCount, pageIndex, setPageIndex, rowsPerPage, setRowsPerPage, addRoute, onSearch }) => {
+const DataTable = ({ data, columns, loading, totalCount, pageIndex, setPageIndex, rowsPerPage, setRowsPerPage, handleCreate, onSearch }) => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState(""); 
 
@@ -53,7 +53,7 @@ const DataTable = ({ data, columns, loading, totalCount, pageIndex, setPageIndex
                         />
                     </div>
                     <button
-                        onClick={() => router.push(addRoute)}
+                        onClick={handleCreate}
                         className="px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition"
                     >
                         Agregar Nuevo
