@@ -1,12 +1,21 @@
-const InputField = ({ label, register, error, type }) => (
+const InputField = ({ label, register, error, type, id }) => (
     <div className="mb-4">
-        <label className="block mb-1">{label}</label>
+        <label htmlFor={id} className="block text-sm font-medium text-gray-700">{label}</label>
         {type === "textarea" ? (
-            <textarea {...register} className="w-full border p-2 rounded focus:ring-primary-600 focus:border-primary-600 " />
+            <textarea 
+                id={id} 
+                {...register} 
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm p-2"
+            />
         ) : (
-            <input {...register} type={type} className="w-full border p-2 rounded focus:ring-primary-600 focus:border-primary-600" />
+            <input 
+                id={id} 
+                {...register} 
+                type={type} 
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm p-2"
+            />
         )}
-        {error && <p className="text-red-500 text-[11px]">{error.message}</p>}
+        {error && <p className="text-red-500 text-xs">{error.message}</p>}
     </div>
 );
 

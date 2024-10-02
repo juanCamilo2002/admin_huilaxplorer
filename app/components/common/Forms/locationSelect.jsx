@@ -1,13 +1,17 @@
 import { Controller } from "react-hook-form";
 
 const LocationsSelect = ({ control, locations, error }) => (
-  <div>
-    <label htmlFor="location" className="block mb-1">Ubicación</label>
+  <div className="mb-4">
+    <label htmlFor="location" className="block text-sm font-medium text-gray-700">Ubicación</label>
     <Controller
       name="location"
       control={control}
       render={({ field }) => (
-        <select {...field} className="w-full border p-2 rounded focus:ring-primary-600 focus:border-primary-600">
+        <select
+          {...field}
+          id="location"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 p-2"
+        >
           <option value="">Seleccionar una ubicación</option>
           {locations.map((location) => (
             <option key={location.id} value={location.name}>
@@ -17,7 +21,7 @@ const LocationsSelect = ({ control, locations, error }) => (
         </select>
       )}
     />
-    {error && <p className="text-red-500 text-[11px]">{error.message}</p>}
+    {error && <p className="text-red-500 text-xs">{error.message}</p>}
   </div>
 );
 
