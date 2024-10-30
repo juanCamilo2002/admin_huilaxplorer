@@ -40,7 +40,7 @@ const UpdateTouristSpot = ({ params }) => {
   useEffect(() => {
     const loadActivities = async () => {
       try {
-        const res = await request("get", "/activities-spots/");
+        const res = await request("get", "/activities-spots/?all=true");
         setActivities(res.results);
       } catch (error) {
         toast.error("Error fetching activities");
@@ -49,7 +49,7 @@ const UpdateTouristSpot = ({ params }) => {
 
     const loadLocations = async () => {
       try {
-        const res = await request("get", "/location-spots/");
+        const res = await request("get", "/location-spots/?all=true");
         setLocations(res.results);
       } catch (error) {
         toast.error("Error fetching locations");

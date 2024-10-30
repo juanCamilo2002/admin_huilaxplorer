@@ -2,6 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { CogIcon, EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 const ProfileMenu = () => {
   return (
@@ -19,13 +20,13 @@ const ProfileMenu = () => {
         <div className="py-1">
           <MenuItem>
 
-            <a
-              href="#"
+            <Link
+              href="/profile"
               className=" flex gap-2 items-center px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
             >
               <CogIcon className='w-5 h-5' />
-              Perfil 
-            </a>
+              Perfil
+            </Link  >
           </MenuItem>
 
           <form action="#" method="POST">
@@ -36,7 +37,7 @@ const ProfileMenu = () => {
                 className="flex gap-2 items-center w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
               >
                 <ArrowLeftOnRectangleIcon className='w-5 h-5' />
-                Cerrar Sesion 
+                Cerrar Sesion
               </button>
             </MenuItem>
           </form>
