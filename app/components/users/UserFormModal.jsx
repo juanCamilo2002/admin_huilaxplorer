@@ -1,13 +1,14 @@
 "use client";
 
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
 
 const UserFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
+  const [isLoading, setIsLoading] = useState(false); // Estado para gestionar "Cargando..."
   // Esquema de validación con Yup para creación
   const createValidationSchema = Yup.object().shape({
     first_name: Yup.string().required('El nombre es requerido'),
@@ -68,13 +69,17 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     }
   }, [isOpen, initialData, resetCreate, resetEdit]);
 
-  const onCreateSubmit = (data) => {
-    onSubmit(data);
+  const onCreateSubmit = async (data) => {
+    setIsLoading(true); // Iniciar "Cargando..."
+    await onSubmit(data); // Esperar la función de envío
+    setIsLoading(false); // Terminar "Cargando..."
     onClose();
   };
 
-  const onEditSubmit = (data) => {
-    onSubmit(data);
+  const onEditSubmit = async (data) => {
+    setIsLoading(true); // Iniciar "Cargando..."
+    await onSubmit(data); // Esperar la función de envío
+    setIsLoading(false); // Terminar "Cargando..."
     onClose();
   };
 
@@ -230,9 +235,10 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                   </button>
                   <button
                     type="submit"
+                    disabled={isLoading} // Deshabilitar botón cuando está cargando
                     className="ml-2 w-full inline-flex justify-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                   >
-                    Crear
+                    {isLoading ? 'Cargando...' : 'Crear'} 
                   </button>
                 </div>
                 </form>
@@ -316,9 +322,10 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                   </button>
                   <button
                     type="submit"
+                    disabled={isLoading} // Deshabilitar botón cuando está cargando
                     className="ml-2 w-full inline-flex justify-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                   >
-                   Actualizar
+                  {isLoading ? 'Cargando...' : 'Actualizar'}
                   </button>
                 </div>
                 </form>

@@ -9,6 +9,7 @@ const EventManager = ({ touristSpotId }) => {
   const { request } = useCustomAxios();
   const [events, setEvents] = useState([]);
   const [editingEvent, setEditingEvent] = useState(null);
+  const [loading, setLoading] = useState(false);  // Estado para el botón
 
   // Ref para el formulario
   const formRef = useRef(null);
@@ -46,6 +47,7 @@ const EventManager = ({ touristSpotId }) => {
   }, [touristSpotId]);
 
   const submitEvent = async (data) => {
+    setLoading(true);
     const eventDate = new Date(data.eventDate).toISOString().split('T')[0];
 
     const payload = {
@@ -73,6 +75,8 @@ const EventManager = ({ touristSpotId }) => {
       fetchEvents(); // Recargar los eventos
     } catch (error) {
       toast.error(`Error al guardar evento: ${error.message}`);
+    } finally {
+      setLoading(false); // Desactivar estado de carga
     }
   };
 
@@ -150,8 +154,8 @@ const EventManager = ({ touristSpotId }) => {
         </div>
 
         <div className="flex justify-between">
-          <button type="submit" className="w-full h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded">
-            {editingEvent ? "Actualizar Evento" : "Crear Evento"}
+          <button type="submit" disabled={loading} className="w-full h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded">
+            {loading ? "Cargando..." :(editingEvent ? "Actualizar Evento" : "Crear Evento")}
           </button>
           {editingEvent && (
             <button type="button" onClick={cancelEdit} className="w-full h-12 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded ml-4">

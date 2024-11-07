@@ -1,6 +1,6 @@
 'use client';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,6 +11,8 @@ const ActivityFormModal = ({ isOpen, closeModal, onSubmit, initialData }) => {
     console.error('closeModal is not a function');
     return null;
   }
+
+  const [loading, setLoading] = useState(false); // Estado de carga
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('El nombre es requerido'),
@@ -32,10 +34,16 @@ const ActivityFormModal = ({ isOpen, closeModal, onSubmit, initialData }) => {
     }
   }, [isOpen, initialData, reset]);
 
-  const onFormSubmit = (data) => {
-    console.log('Submitted data:', data); // Agregado para depuración
-    onSubmit(data);
-    closeModal();
+  const onFormSubmit = async (data) => {
+    setLoading(true); // Activar estado de carga
+    try {
+      await onSubmit(data);
+      closeModal();
+    } catch (error) {
+      console.error('Error al enviar el formulario:', error);
+    } finally {
+      setLoading(false); // Desactivar estado de carga
+    }
   };
 
   return (
@@ -124,9 +132,10 @@ const ActivityFormModal = ({ isOpen, closeModal, onSubmit, initialData }) => {
                   </button>
                   <button
                     type="submit"
+                    disabled={loading} // Deshabilitar botón cuando está cargando
                     className="ml-2 w-full inline-flex justify-center rounded-md border border-transparent bg-primary-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                   >
-                    {initialData ? 'Actualizar' : 'Crear'}
+                    {loading ? 'Cargando...' : initialData ? 'Actualizar' : 'Crear'}
                   </button>
                 </div>
               </form>
