@@ -23,6 +23,7 @@ const UpdateTouristSpot = ({ params }) => {
   const [imageFiles, setImageFiles] = useState([]);
   const [initialData, setInitialData] = useState(null);
   const [deletedImages, setDeletedImages] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false); // Estado de carga
 
 
   const {
@@ -127,6 +128,7 @@ const UpdateTouristSpot = ({ params }) => {
   };
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     const payload = {
       name: data.name,
       description: data.description,
@@ -155,6 +157,9 @@ const UpdateTouristSpot = ({ params }) => {
     } catch (error) {
       console.error("Update error:", error.response);
       toast.error(`Error updating tourist spot: ${error.response?.data?.detail || error.message}`);
+    }
+    finally {
+      setIsLoading(false); // Desactiva el estado de carga al finalizar la solicitud
     }
   };
   
@@ -209,8 +214,12 @@ const UpdateTouristSpot = ({ params }) => {
           setDeletedImages={setDeletedImages} // Se pasa para manejar imágenes eliminadas
         />
 
-        <button type="submit" className="w-full h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded">
-          Actualizar Lugar Turístico
+        <button
+          type="submit"
+          disabled={isLoading} // Desactiva el botón si isLoading es true
+          className="w-full h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded disabled:bg-gray-400"
+        >
+          {isLoading ? "Cargando..." : "Actualizar Lugar Turístico"}
         </button>
       </form>
 

@@ -12,7 +12,6 @@ import ImageUploader from "@/app/components/common/Forms/ImageUploader";
 import LocationsSelect from "@/app/components/common/Forms/locationSelect";
 import InputField from "@/app/components/common/Forms/inputField";
 
-
 const CreateTouristSpot = () => {
   const { data: session } = useSession();
   const { request } = useCustomAxios();
@@ -20,6 +19,7 @@ const CreateTouristSpot = () => {
   const [activities, setActivities] = useState([]);
   const [locations, setLocations] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Estado de carga
 
   const {
     register,
@@ -80,6 +80,7 @@ const CreateTouristSpot = () => {
   };
 
   const onSubmit = async (data) => {
+    setIsLoading(true); // Activa el estado de carga al iniciar la solicitud
     const payload = {
       name: data.name,
       description: data.description,
@@ -101,6 +102,8 @@ const CreateTouristSpot = () => {
       router.push("/dashboard/tourist-spots");
     } catch (error) {
       toast.error("Error creando lugar turístico");
+    } finally {
+      setIsLoading(false); // Desactiva el estado de carga al finalizar la solicitud
     }
   };
 
@@ -145,14 +148,16 @@ const CreateTouristSpot = () => {
 
         <ImageUploader setImageFiles={setImageFiles} />
 
-        <button type="submit" className="w-full h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded">
-          Crear Lugar Turístico
+        <button
+          type="submit"
+          disabled={isLoading} // Desactiva el botón si isLoading es true
+          className="w-full h-12 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded disabled:bg-gray-400"
+        >
+          {isLoading ? "Cargando..." : "Crear Lugar Turístico"}
         </button>
       </form>
     </div>
   );
 };
-
-
 
 export default CreateTouristSpot;
