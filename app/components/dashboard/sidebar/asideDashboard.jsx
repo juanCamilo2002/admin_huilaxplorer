@@ -3,6 +3,7 @@ import { ChevronLeftIcon } from '@heroicons/react/20/solid';
 import { useState, createContext, useContext } from 'react';
 import { useSession } from 'next-auth/react';
 import ProfileMenu from '../profileMenu';
+import Image from 'next/image';
 
 export const SidebarContext = createContext();
 
@@ -13,10 +14,12 @@ export default function AsideDashboard({ children }) {
     <aside className='min-h-screen hidden lg:block'>
       <nav className='h-full flex flex-col bg-white border-r shadow-sm'>
         <div className='p-4 pb-2 flex  justify-between items-center'>
-          <img
-            src="https://img.logoipsum.com/238.svg"
+          <Image
+            src={'/Imagen2.png'}
+            width={expanded ? 170 : 25} height="30"
+            objectFit='cover'
             alt=""
-            className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`}
+            
           />
           <button onClick={() => setExpanded(prev => !prev)} className='p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100'>
             {expanded ? <ChevronLeftIcon className='w-5 h-5' /> : <ChevronLeftIcon className='w-5 h-5 transform rotate-180' />}
